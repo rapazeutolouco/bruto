@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Solicita o nome do arquivo ao usuário
+read -p "Digite o nome do arquivo ZIP protegido por senha (.zip): " arquivo
+
+# Verifica se o arquivo especificado existe
+if [ ! -f "$arquivo" ]; then
+    echo "O arquivo '$arquivo' não existe."
+    exit 1
+fi
+
+# Extrai o hash do arquivo ZIP
+zip2john "$arquivo" > hash.txt
+
+# Quebra a senha usando o John the Ripper
+echo "Quebrando a senha com o John the Ripper..."
+john hash.txt
+
+# Mostra a senha quebrada, se encontrada
+echo "Senha quebrada:"
+john --show hash.txt
+
+# Limpa os arquivos temporários (opcional)
+# rm hash.txt
+
+exit 0
